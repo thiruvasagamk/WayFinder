@@ -259,8 +259,6 @@ var textFile = null,
   };
 
   var create = document.getElementById('create');
-  
-	
 
   create.addEventListener('click', function () {
     var link = document.getElementById('downloadlink');
@@ -268,16 +266,26 @@ var textFile = null,
 	var first=0;
 	for(i=1;i<=rowCount;i++){
 		//alert('undefied'+$('#nodeName-'+i)+'index'+i);
-		nodeName
-		if($('#nodeName-'+i) && $('#nodeName-'+i)!='undefined' && $('#nodeKey-'+i) && $('#nodeKey-'+i)!='undefined' && $('#nodeCoordinates-'+i) && $('#nodeCoordinates-'+i)!='undefined' && $('#nodeLinks-'+i) && $('#nodeLinks-'+i)!='undefined'){
+		if($('#nodeName-'+i) && $('#nodeName-'+i)!='undefined' && $('#nodeKey-'+i) && $('#nodeKey-'+i)!='undefined' && $('#nodeCoordinates-'+i) && $('#nodeCoordinates-'+i)!='undefined' && $('#nodeLinks-'+i)){
+			var nodeLinks = $('#nodeLinks-'+i).val();
+			if($('#nodeLinks-'+i)=='undefined'){
+				nodeLinks='NA';
+			}
 			var nodeName = $('#nodeName-'+i).val();
 			var nodeKey = $('#nodeKey-'+i).val();
 			var nodeCoordinates = $('#nodeCoordinates-'+i).val();
-			var nodeLinks = $('#nodeLinks-'+i).val();
+			
+			nodeLinks = nodeLinks.replace(',','-');
 			if(typeof nodeName!='undefined'){ 
-				textbox=textbox+nodeName+','+nodeKey+','+nodeCoordinates+','+nodeLinks+'#';
+				var newline = '\n';
+				if(i==1){
+					textbox=nodeName+','+nodeKey+','+nodeCoordinates+','+nodeLinks+newline;
+				}else if(i==rowCount){
+					textbox=textbox+nodeName+','+nodeKey+','+nodeCoordinates+','+nodeLinks+','+"EOD";
+				}else{
+					textbox=textbox+nodeName+','+nodeKey+','+nodeCoordinates+','+nodeLinks+newline;
+				}
 			}
-		
 		}
 	}
 	
@@ -285,7 +293,7 @@ var textFile = null,
     link.style.display = 'block';
   }, false);
 })();
-/** File Write Ends here**/
+
 
 </script>
 </body>
