@@ -95,8 +95,9 @@
 <div class="container-fluid">
 	 <div class="row content">
 		<div class="col-sm-9">
-		  <img style="display:none" id="scream"  src="11th-stright-1.png" alt="The Scream">
-		  <div style="max-height: 500px;max-width:900px;overflow: scroll;">
+		  <img style="display:none" id="scream"  src="12th-2.png" alt="The Scream">
+		  <div><button name="Refresh" onclick="refresh()">Refresh</button><input type="file" id="myFile" size="50"/></div>
+		  <div style="max-height: 500px;max-width:900px;overflow: scroll;" id="canvasContainer">
 			  <canvas width="2000px" height="1100px" id="myCanvas"></canvas>
 			</div> 
 		</div>
@@ -105,9 +106,10 @@
 				<div id="dialog" title="Basic dialog" >
 					<!--Download-->
 					<div class="grid-container">
-						<div class="grid-item"><button style="width:100px;" onclick="createRow();">Add Node</button></div>
-						<div class="grid-item"><button style="width:100px;" id="create">Create file</button></div>
-						<div class="grid-item"><button style="width:100px;"><a download="info.txt" id="downloadlink" style="display: ">Download</a></button></div>
+						<div class="grid-item"><button style="width:80px;" onclick="createRow();">Add Node</button></div>
+						<div class="grid-item"><button style="width:80px;" id="create">Edit file</button></div>
+						<div class="grid-item"><button style="width:80px;" id="create">Create file</button></div>
+						<div class="grid-item"><button style="width:80px;"><a download="info.txt" id="downloadlink" style="display: ">Download</a></button></div>
 						<div class="grid-item">&nbsp;</div>
 						<div class="grid-item">&nbsp;</div>
 						<div class="grid-item">&nbsp;</div>
@@ -135,9 +137,38 @@
   <p>Footer Text</p>
 </footer>
 <script>
+
 <!-- Canvas Events/Section Starts -->
-var c = document.getElementById("myCanvas");
-var ctx = c.getContext("2d");
+   var c = document.getElementById("myCanvas");
+    var ctx = c.getContext("2d");
+	
+	var canvasOffset=$("#myCanvas").offset();
+    var offsetX=canvasOffset.left;
+    var offsetY=canvasOffset.top;
+	
+	var img = document.getElementById("scream");
+	img.setAttribute('crossOrigin', '');
+    ctx.drawImage(img, 10, 10);
+	
+	openDialog();
+
+	function refresh(){
+		c = document.getElementById("myCanvas");
+		ctx.clearRect(0, 0, c.width, c.height);
+		ctx = c.getContext("2d");
+		img = document.getElementById("scream");
+		ctx.drawImage(img, 10, 10);
+	}
+   $(document).ready(function(){
+        $('input[type="file"]').change(function(){
+			//console.log($('input[type="file"]').val());
+			var filePath = $('input[type="file"]').val();
+			var folderLength = filePath.split('\\').length;
+			var fileName = filePath.split('\\')[folderLength-1];
+			$('#scream').attr('src',fileName);
+	    });
+    });
+
 c.addEventListener('click', function(evt) {
 	var rowID = $('input[name=selectNode]:checked' ).attr('id');
 	rowID = rowID.replace('selectNode-','');
@@ -216,18 +247,7 @@ function deleteRow(rowID){
 	$('#row'+rowID).remove();
 }
 window.onload = function(x,y) {
-    var c = document.getElementById("myCanvas");
-    var ctx = c.getContext("2d");
-	
-	var canvasOffset=$("#myCanvas").offset();
-    var offsetX=canvasOffset.left;
-    var offsetY=canvasOffset.top;
-	
-	var img = document.getElementById("scream");
-	img.setAttribute('crossOrigin', '');
-    ctx.drawImage(img, 10, 10);
-	
-	openDialog();
+    
 }
 function openDialog(){
 	 <!--$( "#dialog" ).dialog();-->
