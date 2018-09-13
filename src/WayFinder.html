@@ -230,7 +230,7 @@ function openDialog(){
 		$('#endPoint').append($('<option></option>').attr('value', index).text(coordsName));
 		cities.push({x:xaxis, y:yaxis,  radius:10, name:index});//}
 	});
-	//draw(ctx,cities);
+	draw(ctx,cities);
 	
 	var count = 0;
 	var src;
