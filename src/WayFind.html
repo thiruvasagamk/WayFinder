@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <style>
     body{ background-color: ivory; }
@@ -9,23 +9,57 @@
 <img style="display:none" id="scream" width="220" height="277" src="11th-stright-1.png" alt="The Scream">
 <canvas id="myCanvas" width="1950" height="1000" style="border:1px solid #d3d3d3;">Your browser does not support the HTML5 canvas tag.
 </canvas>
-
+<br>
 <input type="text" id="fromPoint" value="N1"/>
 <input type="text" id="endPoint" value="N10"/>
 <button style="font-size:24px" onclick="drawDirection(ctx);">Get Direction <i class="material-icons">add_location</i></button>
 <script>
- "use strict"; 
- var coordinates = {'N1':'769#681','N2':'956#695','N3':'1035#689','N4':'1174#796','N5':'1225#692','N6':'1206#517','N7':'1070#523','N8':'947#522','N9':'588#682','N10':'318#635','N11':'221#666','N12':'601#527','N13':'620#287','N14':'657#286'};
-	var routes = {'N1-N10':'N1-N9-N10','N1-N11':'N1-N9-N10-N11','N1-N12':'N1-N9-N12','N1-N13':'N1-N9-N12-N13','N1-N14':'N1-N9-N12-N13-N14','N1-N2':'N1-N2','N1-N3':'N1-N2-N3','N1-N4':'N1-N2-N3-N4','N1-N5':'N1-N2-N3-N4-N5','N1-N6':'N1-N2-N3-N4-N5-N6','N1-N7':'N1-N2-N3-N4-N5-N6-N7','N1-N8':'N1-N2-N3-N4-N5-N6-N7-N8','N1-N9':'N1-N9','N10-N1':'N10-N9-N1','N10-N11':'N10-N11','N10-N12':'N10-N9-N12','N10-N13':'N10-N9-N12-N13','N10-N14':'N10-N9-N12-N13-N14','N10-N2':'N10-N9-N1-N2','N10-N3':'N10-N9-N1-N2-N3','N10-N4':'N10-N9-N1-N2-N3-N4','N10-N5':'N10-N9-N1-N2-N3-N4-N5','N10-N6':'N10-N9-N1-N2-N3-N4-N5-N6','N10-N7':'N10-N9-N1-N2-N3-N4-N5-N6-N7','N10-N8':'N10-N9-N1-N2-N3-N4-N5-N6-N7-N8','N10-N9':'N10-N9','N11-N1':'N11-N10-N9-N1','N11-N10':'N11-N10','N11-N12':'N11-N10-N9-N12','N11-N13':'N11-N10-N9-N12-N13','N11-N14':'N11-N10-N9-N12-N13-N14','N11-N2':'N11-N10-N9-N1-N2','N11-N3':'N11-N10-N9-N1-N2-N3','N11-N4':'N11-N10-N9-N1-N2-N3-N4','N11-N5':'N11-N10-N9-N1-N2-N3-N4-N5','N11-N6':'N11-N10-N9-N1-N2-N3-N4-N5-N6','N11-N7':'N11-N10-N9-N1-N2-N3-N4-N5-N6-N7','N11-N8':'N11-N10-N9-N1-N2-N3-N4-N5-N6-N7-N8','N11-N9':'N11-N10-N9','N12-N1':'N12-N9-N1','N12-N10':'N12-N9-N10','N12-N11':'N12-N9-N10-N11','N12-N13':'N12-N13','N12-N14':'N12-N13-N14','N12-N2':'N12-N9-N1-N2','N12-N3':'N12-N9-N1-N2-N3','N12-N4':'N12-N9-N1-N2-N3-N4','N12-N5':'N12-N9-N1-N2-N3-N4-N5','N12-N6':'N12-N9-N1-N2-N3-N4-N5-N6','N12-N7':'N12-N9-N1-N2-N3-N4-N5-N6-N7','N12-N8':'N12-N9-N1-N2-N3-N4-N5-N6-N7-N8','N12-N9':'N12-N9','N13-N1':'N13-N12-N9-N1','N13-N10':'N13-N12-N9-N10','N13-N11':'N13-N12-N9-N10-N11','N13-N12':'N13-N12','N13-N14':'N13-N14','N13-N2':'N13-N12-N9-N1-N2','N13-N3':'N13-N12-N9-N1-N2-N3','N13-N4':'N13-N12-N9-N1-N2-N3-N4','N13-N5':'N13-N12-N9-N1-N2-N3-N4-N5','N13-N6':'N13-N12-N9-N1-N2-N3-N4-N5-N6','N13-N7':'N13-N12-N9-N1-N2-N3-N4-N5-N6-N7','N13-N8':'N13-N12-N9-N1-N2-N3-N4-N5-N6-N7-N8','N13-N9':'N13-N12-N9','N14-N1':'N14-N13-N12-N9-N1','N14-N10':'N14-N13-N12-N9-N10','N14-N11':'N14-N13-N12-N9-N10-N11','N14-N12':'N14-N13-N12','N14-N13':'N14-N13','N14-N2':'N14-N13-N12-N9-N1-N2','N14-N3':'N14-N13-N12-N9-N1-N2-N3','N14-N4':'N14-N13-N12-N9-N1-N2-N3-N4','N14-N5':'N14-N13-N12-N9-N1-N2-N3-N4-N5','N14-N6':'N14-N13-N12-N9-N1-N2-N3-N4-N5-N6','N14-N7':'N14-N13-N12-N9-N1-N2-N3-N4-N5-N6-N7','N14-N8':'N14-N13-N12-N9-N1-N2-N3-N4-N5-N6-N7-N8','N14-N9':'N14-N13-N12-N9','N2-N1':'N2-N1','N2-N10':'N2-N1-N9-N10','N2-N11':'N2-N1-N9-N10-N11','N2-N12':'N2-N1-N9-N12','N2-N13':'N2-N1-N9-N12-N13','N2-N14':'N2-N1-N9-N12-N13-N14','N2-N3':'N2-N3','N2-N4':'N2-N3-N4','N2-N5':'N2-N3-N4-N5','N2-N6':'N2-N3-N4-N5-N6','N2-N7':'N2-N3-N4-N5-N6-N7','N2-N8':'N2-N3-N4-N5-N6-N7-N8','N2-N9':'N2-N1-N9','N3-N1':'N3-N2-N1','N3-N10':'N3-N2-N1-N9-N10','N3-N11':'N3-N2-N1-N9-N10-N11','N3-N12':'N3-N2-N1-N9-N12','N3-N13':'N3-N2-N1-N9-N12-N13','N3-N14':'N3-N2-N1-N9-N12-N13-N14','N3-N2':'N3-N2','N3-N4':'N3-N4','N3-N5':'N3-N4-N5','N3-N6':'N3-N4-N5-N6','N3-N7':'N3-N4-N5-N6-N7','N3-N8':'N3-N4-N5-N6-N7-N8','N3-N9':'N3-N2-N1-N9','N4-N1':'N4-N3-N2-N1','N4-N10':'N4-N3-N2-N1-N9-N10','N4-N11':'N4-N3-N2-N1-N9-N10-N11','N4-N12':'N4-N3-N2-N1-N9-N12','N4-N13':'N4-N3-N2-N1-N9-N12-N13','N4-N14':'N4-N3-N2-N1-N9-N12-N13-N14','N4-N2':'N4-N3-N2','N4-N3':'N4-N3','N4-N5':'N4-N5','N4-N6':'N4-N5-N6','N4-N7':'N4-N5-N6-N7','N4-N8':'N4-N5-N6-N7-N8','N4-N9':'N4-N3-N2-N1-N9','N5-N1':'N5-N4-N3-N2-N1','N5-N10':'N5-N4-N3-N2-N1-N9-N10','N5-N11':'N5-N4-N3-N2-N1-N9-N10-N11','N5-N12':'N5-N4-N3-N2-N1-N9-N12','N5-N13':'N5-N4-N3-N2-N1-N9-N12-N13','N5-N14':'N5-N4-N3-N2-N1-N9-N12-N13-N14','N5-N2':'N5-N4-N3-N2','N5-N3':'N5-N4-N3','N5-N4':'N5-N4','N5-N6':'N5-N6','N5-N7':'N5-N6-N7','N5-N8':'N5-N6-N7-N8','N5-N9':'N5-N4-N3-N2-N1-N9','N6-N1':'N6-N5-N4-N3-N2-N1','N6-N10':'N6-N5-N4-N3-N2-N1-N9-N10','N6-N11':'N6-N5-N4-N3-N2-N1-N9-N10-N11','N6-N12':'N6-N5-N4-N3-N2-N1-N9-N12','N6-N13':'N6-N5-N4-N3-N2-N1-N9-N12-N13','N6-N14':'N6-N5-N4-N3-N2-N1-N9-N12-N13-N14','N6-N2':'N6-N5-N4-N3-N2','N6-N3':'N6-N5-N4-N3','N6-N4':'N6-N5-N4','N6-N5':'N6-N5','N6-N7':'N6-N7','N6-N8':'N6-N7-N8','N6-N9':'N6-N5-N4-N3-N2-N1-N9','N7-N1':'N7-N6-N5-N4-N3-N2-N1','N7-N10':'N7-N6-N5-N4-N3-N2-N1-N9-N10','N7-N11':'N7-N6-N5-N4-N3-N2-N1-N9-N10-N11','N7-N12':'N7-N6-N5-N4-N3-N2-N1-N9-N12','N7-N13':'N7-N6-N5-N4-N3-N2-N1-N9-N12-N13','N7-N14':'N7-N6-N5-N4-N3-N2-N1-N9-N12-N13-N14','N7-N2':'N7-N6-N5-N4-N3-N2','N7-N3':'N7-N6-N5-N4-N3','N7-N4':'N7-N6-N5-N4','N7-N5':'N7-N6-N5','N7-N6':'N7-N6','N7-N8':'N7-N8','N7-N9':'N7-N6-N5-N4-N3-N2-N1-N9','N8-N1':'N8-N7-N6-N5-N4-N3-N2-N1','N8-N10':'N8-N7-N6-N5-N4-N3-N2-N1-N9-N10','N8-N11':'N8-N7-N6-N5-N4-N3-N2-N1-N9-N10-N11','N8-N12':'N8-N7-N6-N5-N4-N3-N2-N1-N9-N12','N8-N13':'N8-N7-N6-N5-N4-N3-N2-N1-N9-N12-N13','N8-N14':'N8-N7-N6-N5-N4-N3-N2-N1-N9-N12-N13-N14','N8-N2':'N8-N7-N6-N5-N4-N3-N2','N8-N3':'N8-N7-N6-N5-N4-N3','N8-N4':'N8-N7-N6-N5-N4','N8-N5':'N8-N7-N6-N5','N8-N6':'N8-N7-N6','N8-N7':'N8-N7','N8-N9':'N8-N7-N6-N5-N4-N3-N2-N1-N9','N9-N1':'N9-N1','N9-N10':'N9-N10','N9-N11':'N9-N10-N11','N9-N12':'N9-N12','N9-N13':'N9-N12-N13','N9-N14':'N9-N12-N13-N14','N9-N2':'N9-N1-N2','N9-N3':'N9-N1-N2-N3','N9-N4':'N9-N1-N2-N3-N4','N9-N5':'N9-N1-N2-N3-N4-N5','N9-N6':'N9-N1-N2-N3-N4-N5-N6','N9-N7':'N9-N1-N2-N3-N4-N5-N6-N7','N9-N8':'N9-N1-N2-N3-N4-N5-N6-N7-N8'};
+
+
+      var request = new XMLHttpRequest();
+      request.open('GET', '/ambishelter/coordinatexyJSON.json', true);
+	  request.setRequestHeader('Content-type','application/json; charset=utf-8');
+      request.onreadystatechange = function() {
+        // Makes sure the document is ready to parse.
+        if(request.readyState == 4) {
+          // Makes sure it's found the file.
+          if(request.status == 200) {
+					var request1 = new XMLHttpRequest();
+					request1.open('GET', '/ambishelter/pathJson.json', true);
+					request1.setRequestHeader('Content-type','application/json; charset=utf-8');
+					request1.onreadystatechange = function() {
+					// Makes sure the document is ready to parse.
+					if(request1.readyState == 4) {
+					// Makes sure it's found the file.
+					if(request1.status == 200) {
+						console.log(request1.responseText);
+						construct(request.responseText,request1.responseText);
+					}
+					}
+					};
+					request1.send(null);
+          }
+        }
+      };
+      request.send(null);
+
+	  
+ 
+ var coordinates;
+ var routes;
+ 
+ 
   var c = document.getElementById("myCanvas");
     var ctx = c.getContext("2d");
 	var img = document.getElementById("scream");
 	var cities=[];
- window.onload = function(x,y) {
+	
+
+/* window.onload = function(x,y) {
 	construct();
- }
+ }*/
  
- 
+
  
  function draw(ctx,cities){		
 		for (var i=0;i<cities.length;i++){
@@ -38,25 +72,22 @@
 		}
 	}
 	
- function construct(){
-   
-	
+ function construct(json,json1){
+ 
 	var canvasOffset=$("#myCanvas").offset();
     var offsetX=canvasOffset.left;
     var offsetY=canvasOffset.top;
-	
-	
     ctx.drawImage(img, 10, 10);
 	
 	
-
-	//var coordinates = { 'N1':'772#686','N2':'954#694','N3':'1044#694','N4':'1132#692','N5':'1228#686','N6':'1212#516','N7':'1076#526','D3':'956#526','N9':'572#676','N10':'320#634','D1':'228#666','N12':'596#522','N13':'612#286','D2':'658#282' };
-	var coordinates = {'N1':'769#681','N2':'956#695','N3':'1035#689','N4':'1174#796','N5':'1225#692','N6':'1206#517','N7':'1070#523','N8':'947#522','N9':'588#682','N10':'318#635','N11':'221#666','N12':'601#527','N13':'620#287','N14':'657#286'};
-	var routes = {'N1-N10':'N1-N9-N10','N1-N11':'N1-N9-N10-N11','N1-N12':'N1-N9-N12','N1-N13':'N1-N9-N12-N13','N1-N14':'N1-N9-N12-N13-N14','N1-N2':'N1-N2','N1-N3':'N1-N2-N3','N1-N4':'N1-N2-N3-N4','N1-N5':'N1-N2-N3-N4-N5','N1-N6':'N1-N2-N3-N4-N5-N6','N1-N7':'N1-N2-N3-N4-N5-N6-N7','N1-N8':'N1-N2-N3-N4-N5-N6-N7-N8','N1-N9':'N1-N9','N10-N1':'N10-N9-N1','N10-N11':'N10-N11','N10-N12':'N10-N9-N12','N10-N13':'N10-N9-N12-N13','N10-N14':'N10-N9-N12-N13-N14','N10-N2':'N10-N9-N1-N2','N10-N3':'N10-N9-N1-N2-N3','N10-N4':'N10-N9-N1-N2-N3-N4','N10-N5':'N10-N9-N1-N2-N3-N4-N5','N10-N6':'N10-N9-N1-N2-N3-N4-N5-N6','N10-N7':'N10-N9-N1-N2-N3-N4-N5-N6-N7','N10-N8':'N10-N9-N1-N2-N3-N4-N5-N6-N7-N8','N10-N9':'N10-N9','N11-N1':'N11-N10-N9-N1','N11-N10':'N11-N10','N11-N12':'N11-N10-N9-N12','N11-N13':'N11-N10-N9-N12-N13','N11-N14':'N11-N10-N9-N12-N13-N14','N11-N2':'N11-N10-N9-N1-N2','N11-N3':'N11-N10-N9-N1-N2-N3','N11-N4':'N11-N10-N9-N1-N2-N3-N4','N11-N5':'N11-N10-N9-N1-N2-N3-N4-N5','N11-N6':'N11-N10-N9-N1-N2-N3-N4-N5-N6','N11-N7':'N11-N10-N9-N1-N2-N3-N4-N5-N6-N7','N11-N8':'N11-N10-N9-N1-N2-N3-N4-N5-N6-N7-N8','N11-N9':'N11-N10-N9','N12-N1':'N12-N9-N1','N12-N10':'N12-N9-N10','N12-N11':'N12-N9-N10-N11','N12-N13':'N12-N13','N12-N14':'N12-N13-N14','N12-N2':'N12-N9-N1-N2','N12-N3':'N12-N9-N1-N2-N3','N12-N4':'N12-N9-N1-N2-N3-N4','N12-N5':'N12-N9-N1-N2-N3-N4-N5','N12-N6':'N12-N9-N1-N2-N3-N4-N5-N6','N12-N7':'N12-N9-N1-N2-N3-N4-N5-N6-N7','N12-N8':'N12-N9-N1-N2-N3-N4-N5-N6-N7-N8','N12-N9':'N12-N9','N13-N1':'N13-N12-N9-N1','N13-N10':'N13-N12-N9-N10','N13-N11':'N13-N12-N9-N10-N11','N13-N12':'N13-N12','N13-N14':'N13-N14','N13-N2':'N13-N12-N9-N1-N2','N13-N3':'N13-N12-N9-N1-N2-N3','N13-N4':'N13-N12-N9-N1-N2-N3-N4','N13-N5':'N13-N12-N9-N1-N2-N3-N4-N5','N13-N6':'N13-N12-N9-N1-N2-N3-N4-N5-N6','N13-N7':'N13-N12-N9-N1-N2-N3-N4-N5-N6-N7','N13-N8':'N13-N12-N9-N1-N2-N3-N4-N5-N6-N7-N8','N13-N9':'N13-N12-N9','N14-N1':'N14-N13-N12-N9-N1','N14-N10':'N14-N13-N12-N9-N10','N14-N11':'N14-N13-N12-N9-N10-N11','N14-N12':'N14-N13-N12','N14-N13':'N14-N13','N14-N2':'N14-N13-N12-N9-N1-N2','N14-N3':'N14-N13-N12-N9-N1-N2-N3','N14-N4':'N14-N13-N12-N9-N1-N2-N3-N4','N14-N5':'N14-N13-N12-N9-N1-N2-N3-N4-N5','N14-N6':'N14-N13-N12-N9-N1-N2-N3-N4-N5-N6','N14-N7':'N14-N13-N12-N9-N1-N2-N3-N4-N5-N6-N7','N14-N8':'N14-N13-N12-N9-N1-N2-N3-N4-N5-N6-N7-N8','N14-N9':'N14-N13-N12-N9','N2-N1':'N2-N1','N2-N10':'N2-N1-N9-N10','N2-N11':'N2-N1-N9-N10-N11','N2-N12':'N2-N1-N9-N12','N2-N13':'N2-N1-N9-N12-N13','N2-N14':'N2-N1-N9-N12-N13-N14','N2-N3':'N2-N3','N2-N4':'N2-N3-N4','N2-N5':'N2-N3-N4-N5','N2-N6':'N2-N3-N4-N5-N6','N2-N7':'N2-N3-N4-N5-N6-N7','N2-N8':'N2-N3-N4-N5-N6-N7-N8','N2-N9':'N2-N1-N9','N3-N1':'N3-N2-N1','N3-N10':'N3-N2-N1-N9-N10','N3-N11':'N3-N2-N1-N9-N10-N11','N3-N12':'N3-N2-N1-N9-N12','N3-N13':'N3-N2-N1-N9-N12-N13','N3-N14':'N3-N2-N1-N9-N12-N13-N14','N3-N2':'N3-N2','N3-N4':'N3-N4','N3-N5':'N3-N4-N5','N3-N6':'N3-N4-N5-N6','N3-N7':'N3-N4-N5-N6-N7','N3-N8':'N3-N4-N5-N6-N7-N8','N3-N9':'N3-N2-N1-N9','N4-N1':'N4-N3-N2-N1','N4-N10':'N4-N3-N2-N1-N9-N10','N4-N11':'N4-N3-N2-N1-N9-N10-N11','N4-N12':'N4-N3-N2-N1-N9-N12','N4-N13':'N4-N3-N2-N1-N9-N12-N13','N4-N14':'N4-N3-N2-N1-N9-N12-N13-N14','N4-N2':'N4-N3-N2','N4-N3':'N4-N3','N4-N5':'N4-N5','N4-N6':'N4-N5-N6','N4-N7':'N4-N5-N6-N7','N4-N8':'N4-N5-N6-N7-N8','N4-N9':'N4-N3-N2-N1-N9','N5-N1':'N5-N4-N3-N2-N1','N5-N10':'N5-N4-N3-N2-N1-N9-N10','N5-N11':'N5-N4-N3-N2-N1-N9-N10-N11','N5-N12':'N5-N4-N3-N2-N1-N9-N12','N5-N13':'N5-N4-N3-N2-N1-N9-N12-N13','N5-N14':'N5-N4-N3-N2-N1-N9-N12-N13-N14','N5-N2':'N5-N4-N3-N2','N5-N3':'N5-N4-N3','N5-N4':'N5-N4','N5-N6':'N5-N6','N5-N7':'N5-N6-N7','N5-N8':'N5-N6-N7-N8','N5-N9':'N5-N4-N3-N2-N1-N9','N6-N1':'N6-N5-N4-N3-N2-N1','N6-N10':'N6-N5-N4-N3-N2-N1-N9-N10','N6-N11':'N6-N5-N4-N3-N2-N1-N9-N10-N11','N6-N12':'N6-N5-N4-N3-N2-N1-N9-N12','N6-N13':'N6-N5-N4-N3-N2-N1-N9-N12-N13','N6-N14':'N6-N5-N4-N3-N2-N1-N9-N12-N13-N14','N6-N2':'N6-N5-N4-N3-N2','N6-N3':'N6-N5-N4-N3','N6-N4':'N6-N5-N4','N6-N5':'N6-N5','N6-N7':'N6-N7','N6-N8':'N6-N7-N8','N6-N9':'N6-N5-N4-N3-N2-N1-N9','N7-N1':'N7-N6-N5-N4-N3-N2-N1','N7-N10':'N7-N6-N5-N4-N3-N2-N1-N9-N10','N7-N11':'N7-N6-N5-N4-N3-N2-N1-N9-N10-N11','N7-N12':'N7-N6-N5-N4-N3-N2-N1-N9-N12','N7-N13':'N7-N6-N5-N4-N3-N2-N1-N9-N12-N13','N7-N14':'N7-N6-N5-N4-N3-N2-N1-N9-N12-N13-N14','N7-N2':'N7-N6-N5-N4-N3-N2','N7-N3':'N7-N6-N5-N4-N3','N7-N4':'N7-N6-N5-N4','N7-N5':'N7-N6-N5','N7-N6':'N7-N6','N7-N8':'N7-N8','N7-N9':'N7-N6-N5-N4-N3-N2-N1-N9','N8-N1':'N8-N7-N6-N5-N4-N3-N2-N1','N8-N10':'N8-N7-N6-N5-N4-N3-N2-N1-N9-N10','N8-N11':'N8-N7-N6-N5-N4-N3-N2-N1-N9-N10-N11','N8-N12':'N8-N7-N6-N5-N4-N3-N2-N1-N9-N12','N8-N13':'N8-N7-N6-N5-N4-N3-N2-N1-N9-N12-N13','N8-N14':'N8-N7-N6-N5-N4-N3-N2-N1-N9-N12-N13-N14','N8-N2':'N8-N7-N6-N5-N4-N3-N2','N8-N3':'N8-N7-N6-N5-N4-N3','N8-N4':'N8-N7-N6-N5-N4','N8-N5':'N8-N7-N6-N5','N8-N6':'N8-N7-N6','N8-N7':'N8-N7','N8-N9':'N8-N7-N6-N5-N4-N3-N2-N1-N9','N9-N1':'N9-N1','N9-N10':'N9-N10','N9-N11':'N9-N10-N11','N9-N12':'N9-N12','N9-N13':'N9-N12-N13','N9-N14':'N9-N12-N13-N14','N9-N2':'N9-N1-N2','N9-N3':'N9-N1-N2-N3','N9-N4':'N9-N1-N2-N3-N4','N9-N5':'N9-N1-N2-N3-N4-N5','N9-N6':'N9-N1-N2-N3-N4-N5-N6','N9-N7':'N9-N1-N2-N3-N4-N5-N6-N7','N9-N8':'N9-N1-N2-N3-N4-N5-N6-N7-N8'};
-	//var routes = { 'N1-D1':'N1-N9-N10-D1','N1-D2':'N1-N9-N12-N13-D2','N1-D3':'N1-N2-N3-N4-N5-N6-N7-D3'};
 	
-	 
+
+	coordinates = $.parseJSON(json);
+	routes = $.parseJSON(json1);
+
+
 	var coordinatesmap = $.map( coordinates, function( value, index ) {
+		console.log(index + value);
 		var xaxis = value.split('#')[0];
 		var yaxis = value.split('#')[1];
 		//if(index.startsWith('D') || index=='N1'){
