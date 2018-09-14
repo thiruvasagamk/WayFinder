@@ -87,29 +87,61 @@
 .gridtext{
 	width:50px;
 }
+.alert {
+    padding: 20px;
+    background-color: #57d87e;
+    color: white;
+    opacity: 1;
+    transition: opacity 0.6s;
+    margin-bottom: 15px;
+}
 
+.alert.success {background-color: #4CAF50;}
+.alert.info {background-color: #2196F3;}
+.alert.warning {background-color: #ff9800;}
+
+.closebtn {
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.closebtn:hover {
+    color: black;
+}
+.ui-widget-header{
+ background-color: #57d87e;
+}
   </style>
 </head>
 <body>
-
-<div class="container-fluid">
+<div class="container-fluid" id="position2">
 	 <div class="row content">
-		<div class="col-sm-9">
-		  <img style="display:none" id="scream"  src="12th-2.png" alt="The Scream">
-		  <div><button name="Refresh" onclick="refresh()">Refresh</button><input type="file" id="myFile" size="50"/></div>
-		  <div style="max-height: 500px;max-width:900px;overflow: scroll;" id="canvasContainer">
-			  <canvas width="2000px" height="1100px" id="myCanvas"></canvas>
+
+	 
+		<div class="col-sm-9 col-sm-9 ui-dialog-titlebar ui-corner-all ui-widget-header ui-helper-clearfix ui-draggable-handle" style="width:74%;"><input type="file" id="myFile" size="50"/><button name="Load Floor Map" onclick="refresh()">Load Floor Map</button></div>
+	 
+		<div class="col-sm-9" style="width:75%">
+		  <img style="display:none" id="scream"  src="" alt="The Scream">
+		  <div style="max-height: 500px;max-width:1200px;overflow: scroll;" id="canvasContainer">
+			  <span id="loadFloorMap">No Floor Map Loaded...</span><canvas width="2000px" height="1100px" id="myCanvas"></canvas>
 			</div> 
+			<div class="alert success" style="display:none" id="sFileID"><span class="closebtn">&times;</span><strong>Success!</strong> File Created, <a id="downloadlink">Download</a></div>
 		</div>
+		
 		<div> 
-			<div class="grid-item">
-				<div id="dialog" title="Basic dialog" >
+			<div class="grid-item" id="targetElement">
+				<div id="dialog" title="Search" >
 					<!--Download-->
 					<div class="grid-container">
 						<div class="grid-item"><button style="width:80px;" onclick="createRow();">Add Node</button></div>
 						<div class="grid-item"><button style="width:80px;" onclick="editFloorMap();">Edit file</button></div>
 						<div class="grid-item"><button style="width:80px;" id="create">Create file</button></div>
-						<div class="grid-item"><button style="width:80px;"><a download="WFEditorOutput.txt" id="downloadlink" style="display: ">Download</a></button></div>
 						<div class="grid-item">&nbsp;</div>
 						<div class="grid-item">&nbsp;</div>
 						<div class="grid-item">&nbsp;</div>
@@ -132,10 +164,7 @@
 		</div>
 	</div>
  </div>
-
-<footer class="container-fluid">
-  <p>Footer Text</p>
-</footer>
+ 
 <script>
 
 <!-- Canvas Events/Section Starts -->
@@ -153,6 +182,7 @@
 	openDialog();
 
 	function refresh(){
+		$('#loadFloorMap').text('');
 		c = document.getElementById("myCanvas");
 		ctx.clearRect(0, 0, c.width, c.height);
 		ctx = c.getContext("2d");
@@ -168,6 +198,9 @@
 			$('#scream').attr('src',fileName);
 	    });
     });
+
+
+
 
 c.addEventListener('click', function(evt) {
 	var rowID = $('input[name=selectNode]:checked' ).attr('id');
@@ -228,7 +261,13 @@ function clearTextObject(x,y,rowID) {
 }
  <!-- Canvas Events/Section End -->
  
- 
+ $( "#position2" ).position({
+  my: "left top",
+  at: "left top",
+  of: window
+});
+
+
 var rowCount=0;
 function createRow(){
 	rowCount++;
@@ -304,6 +343,11 @@ window.onload = function(x,y) {
 function openDialog(){
 	 <!--$( "#dialog" ).dialog();-->
 	 $("#dialog").dialog({
+	 position: {
+                    my: "right top",
+                    at: "right top",
+                    of: window
+                },
     //autoOpen: true,
     //height: 500,
     width: 400,
@@ -362,11 +406,17 @@ var textFile = null,
 	}
 	
     link.href = makeTextFile(textbox);
-    link.style.display = 'block';
+    //link.style.display = 'block';
+	link.download = getFloorMapName() + "-FloorMapWayDetails.txt";
+	$('#sFileID').show();
   }, false);
 })();
 
-
+function getFloorMapName(){
+	var filePath = $('#scream').attr('src');
+	var fileName = filePath.split('.')[0];
+	return fileName;
+}
 </script>
 </body>
 </html>

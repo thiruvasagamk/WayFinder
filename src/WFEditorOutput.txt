@@ -1,0 +1,14 @@
+Parking,N1,769,681,N2-N9
+Resturant,N2,956,695,N3
+Auditorium,N3,1035,689,N4
+Food Court,N4,1174,796,N5
+Conference,N5,1225,692,N6
+Cafetarea,N6,1206,517,N7
+Restroom1,N7,1070,523,N8
+IT Room,N8,947,522,NA
+Safe Place,N9,588,682,N10-N12
+Restroom2,N10,318,635,N11
+Meeting Room1,N11,221,666,NA
+Meeting Room2,N12,601,527,N13
+Meeting Room3,N13,620,287,N14
+Security Post,N14,657,286,NA,EOD
