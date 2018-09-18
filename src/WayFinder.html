@@ -87,19 +87,53 @@
 .gridtext{
 	width:50px;
 }
+.alert {
+    padding: 20px;
+    background-color: #57d87e;
+    color: white;
+    opacity: 1;
+    transition: opacity 0.6s;
+    margin-bottom: 15px;
+}
+
+.alert.success {background-color: #4CAF50;}
+.alert.info {background-color: #2196F3;}
+.alert.warning {background-color: #ff9800;}
+
+.closebtn {
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.closebtn:hover {
+    color: black;
+}
+.ui-widget-header{
+ background-color: #57d87e;
+}
 
   </style>
 </head>
 <body>
 
-<div class="container-fluid">
+<div class="container-fluid" id="position2">
 	 <div class="row content">
-		<div class="col-sm-9">
-		  <img style="display:none" id="scream"  src="11th-stright-1.png" alt="The Scream">
-		  <div class="demo" style="max-height: 500px;max-width:900px;overflow: scroll;">
+	 
+	 <div class="col-sm-9 col-sm-9 ui-dialog-titlebar ui-corner-all ui-widget-header ui-helper-clearfix ui-draggable-handle" style="width:74%;height: 3%;">WAY FINDER</div>
+	 
+		<div class="col-sm-9" style="width:75%">
+		  <img style="display:none" id="scream"  src="Floor1.png" alt="The Scream">
+		  <div style="max-height: 500px;max-width:1200px;overflow: scroll;" id="canvasContainer">
 			  <canvas width="2000px" height="1100px" id="myCanvas"></canvas>
 			</div> 
 		</div>
+		
 		<div> 
 			<div class="grid-item">
 				<div id="dialog" title="Search" >
@@ -108,12 +142,13 @@
 					
 					
 					<div class="grid-container">
-						
-						<select id="fromPoint" style="width:350px;">
+						<div><label >Source</label></div>
+						<select id="fromPoint" style="width:280px;">
 						</select>
 					</div>
 					<div class="grid-container">
-						<select id="endPoint" style="width:350px;">
+					<div><label >Destination</label></div>
+						<select id="endPoint" style="width:280px;">
 						</select>						
 					</div>
 					<div class="grid-container">
@@ -134,19 +169,27 @@
   <p>Footer Text</p>
 </footer>
 <script>
-
 function openDialog(){
 	 <!--$( "#dialog" ).dialog();-->
 	 $("#dialog").dialog({
+	 position: {
+                    my: "right top",
+                    at: "right top",
+                    of: window
+                },
     //autoOpen: true,
     //height: 500,
-    width: 400,
+      width: 400,
     //modal: false,
     //draggable: true,
     //resizable: true,
 	});
 }
-
+$( "#position2" ).position({
+  my: "left top",
+  at: "left top",
+  of: window
+});
 
 function getFloorMapName(){
 	var filePath = $('#scream').attr('src');
@@ -154,7 +197,7 @@ function getFloorMapName(){
 	return fileName;
 }
       var request = new XMLHttpRequest();
-      request.open('GET', '/ambishelter/'+getFloorMapName()+'-coordinatexyJSON.json', true);
+      request.open('GET', '/WayFinder/'+getFloorMapName()+'-coordinatexyJSON.json', true);
 	  request.setRequestHeader('Content-type','application/json; charset=utf-8');
       request.onreadystatechange = function() {
         // Makes sure the document is ready to parse.
@@ -162,7 +205,7 @@ function getFloorMapName(){
           // Makes sure it's found the file.
           if(request.status == 200) {
 					var request1 = new XMLHttpRequest();
-					request1.open('GET', '/ambishelter/'+getFloorMapName()+'-pathJson.json', true);
+					request1.open('GET', '/WayFinder/'+getFloorMapName()+'-pathJson.json', true);
 					request1.setRequestHeader('Content-type','application/json; charset=utf-8');
 					request1.onreadystatechange = function() {
 					// Makes sure the document is ready to parse.
@@ -180,30 +223,23 @@ function getFloorMapName(){
       };
       request.send(null);
 
-	  
- 
- var coordinates;
- var routes;
- 
- 
-  var c = document.getElementById("myCanvas");
-    var ctx = c.getContext("2d");
+	var coordinates;
+	var routes;
+	var c = document.getElementById("myCanvas");
+	var ctx = c.getContext("2d");
 	var img = document.getElementById("scream");
 	var cities=[];
-	
 
 /* window.onload = function(x,y) {
 	construct();
  }*/
  
-
- 
- function draw(ctx,cities){		
+function draw(ctx,cities){		
 		for (var i=0;i<cities.length;i++){
 			ctx.beginPath();
 			ctx.arc(cities[i].x, cities[i].y, cities[i].radius, 0 , 2 * Math.PI, false);
 			fill(ctx);
-			ctx.font="bold 25px Arial";
+			ctx.font="bold 14px Arial";
 			ctx.fillText(cities[i].name,cities[i].x, cities[i].y);
 			ctx.stroke();
 		}
@@ -214,16 +250,12 @@ function getFloorMapName(){
 	var canvasOffset=$("#myCanvas").offset();
     var offsetX=canvasOffset.left;
     var offsetY=canvasOffset.top;
-    ctx.drawImage(img, 10, 10);
-	
-	
-	
+    ctx.drawImage(img, 10, 10);	
 
 	coordinates = $.parseJSON(json);
 	routes = $.parseJSON(json1);
 
-
-	var coordinatesmap = $.map( coordinates, function( value, index ) {
+	var coordinatesmap = $.map(coordinates, function( value, index ) {
 		console.log(index + value);
 		var xaxis = value.split('#')[0];
 		var yaxis = value.split('#')[1];
@@ -232,9 +264,9 @@ function getFloorMapName(){
 		//cities.push({x:xaxis, y:yaxis,  radius:3, name:index});
 		$('#fromPoint').append($('<option></option>').attr('value', index).text(coordsName));
 		$('#endPoint').append($('<option></option>').attr('value', index).text(coordsName));
-		cities.push({x:xaxis, y:yaxis,  radius:10, name:index});//}
+		cities.push({x:xaxis, y:yaxis,  radius:5, name:index});//}
 	});
-	draw(ctx,cities);
+	//draw(ctx,cities);
 	
 	var count = 0;
 	var src;
@@ -244,7 +276,7 @@ function getFloorMapName(){
       canvasMouseY=parseInt(e.clientY-offsetY);
 	  console.log('count'+ count);
 	  if(count==1){
-	   ctx.drawImage(img, 10, 10);draw(ctx,cities);
+	   ctx.drawImage(img, 10, 10);//draw(ctx,cities);
 	  }
 	  var dest;	  	
       // test if we clicked in any cities
@@ -289,12 +321,14 @@ function getFloorMapName(){
 	openDialog();
 
  }
- 
+  
+	var coord;
+	var timerMethod;
+	var timerCTX;
  	function drawDirection(ctx){
-	
-	
+	timerCTX = ctx;
 	ctx.drawImage(img, 10, 10);
-	draw(ctx,cities);
+	//draw(ctx,cities);
 	
 	var src = $('#fromPoint').val();
 	var dest = $('#endPoint').val();
@@ -302,44 +336,65 @@ function getFloorMapName(){
 	var route = routes[path];
 	ctx.setLineDash([5, 3]);
 	console.log(routes + path);
-	var coord = route.split('-');
+	coord = route.split('-');
 	ctx.beginPath();
 	ctx.lineWidth=10;
 	var scrollx;
 	var scrolly;
+	timerMethod = setTimeout(myTimer, 5000);
+	/*
 	for(var i = 0; i < coord.length; i++){
-	var node = coord[i];
-	var xyaxis = coordinates[node];
+	
+		var node = coord[i];
+		var xyaxis = coordinates[node];
 
-	var xaxis = xyaxis.split('#')[0];
-	var yaxis = xyaxis.split('#')[1];
+		var xaxis = xyaxis.split('#')[0];
+		var yaxis = xyaxis.split('#')[1];
 
-	var xparse = parseInt(xaxis);
-	var yparse = parseInt(yaxis);
-	ctx.lineTo(xparse,yparse);
-	scrollx=xparse;scrolly=yparse;
-	}
+		var xparse = parseInt(xaxis);
+		var yparse = parseInt(yaxis);
+		ctx.lineTo(xparse,yparse);
+		scrollx=xparse;
+		scrolly=yparse;
+	
+	}*/
+	
 	ctx.stroke();
-	
-	
 	 //document.getElementById('myCanvas').scrollTo(scrolly, scrollx);
-$( "div.demo" ).scrollLeft( 500-scrolly );
-$( "div.demo" ).scrollTop( 900-scrollx );
+	$( "div.demo" ).scrollLeft( 500-scrolly );
+	$( "div.demo" ).scrollTop( 900-scrollx );
  }
+ var loopCount = 0;
  
+ function myTimer() {
+		console.log('timer');
+		if(loopCount>coord.length){clearInterval(timerMethod);}
+		var node = coord[loopCount];
+		var xyaxis = coordinates[node];
+
+		var xaxis = xyaxis.split('#')[0];
+		var yaxis = xyaxis.split('#')[1];
+
+		var xparse = parseInt(xaxis);
+		var yparse = parseInt(yaxis);
+		
+		timerCTX.lineTo(xparse,yparse);
+		timerCTX.stroke();
+		console.log('timer'+loopCount);
+		timerMethod = setTimeout(myTimer, 1000);
+		loopCount++;
+ }
+
 function fill(ctx){
-ctx.fillStyle = "green"; 
-//ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
+	ctx.fillStyle = "green"; 
+	//ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
 	ctx.fill();
 	ctx.beginPath();
 }
 function drawLine(ctx,xaxis,yaxis){
 	console.log(ctx);
-	ctx.lineTo(xaxis,yaxis);
-	
+	ctx.lineTo(xaxis,yaxis);	
 }
-
-
 </script>
 </body>
 </html>
