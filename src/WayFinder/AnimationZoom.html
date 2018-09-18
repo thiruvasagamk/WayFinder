@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type='text/javascript'
+  src='https://clicktime.symantec.com/a/1/oiL4wqYlrzvGtmYfWfZI_iHMCfJaSJReO-KuHWkvLA0=?d=PaLzK-7uxkevMn2xl-eqCXTtsnafEX8Nr1wEIUxe28_GaBPJJ1Rmyg7cdRhFEi__W7FO0CdXwKXZL_zO_toxD0DNlb9ePTUIoba2qp3FE2Q9Dc7iryalx8EC6Xf3kY2Q45HW9Q3YpjRd4QlN1QQd_Nk0hpXPO_6Ce__-Gykps9qeK-_fe8O8v0pVijXzJnbpEBXM-cTRbDvOlqp1Mch8PwwguWPVFgC-sK0L6RcRuOj9fkl5QQxVEgUbNLjwJP2QENOW6wmT_zsdaAROfdMA7G3LOlncLZNnW5zOplOTAIeuNOtCYp8HVLjzF6imJyaZLI-3UyQe1RnkRy2Kr0KD4XchQDq0LJV_BJxdqWIFqT2h-T53UpDNtapCTHLJBVE-ZCoKMA-QJa4ormgNUybGe9ip0Ino7iA%3D&u=http%3A%2F%2Fcode.jquery.com%2Fjquery-1.7.1.js'></script>
+
+<script type='text/javascript'>
+
+$(window).load(function(){<!--from   ww w. ja  va2 s . c  o m-->
+
+    var canvas = $("#paper")[0];
+    var ctx = canvas.getContext("2d");   
+    var coordinates = [];   
+
+    var A = [100, 150];
+    var B = [200, 150];
+    var C = [200, 150];
+    var D = [300, 150];
+    var E = [300, 150];
+    var F = [400, 150];
+    var G = [400, 150];
+    var H = [500, 250];
+    function slope(a, b) {
+        if (a[0] == b[0]) {
+            return null;
+        }
+        return (b[1] - a[1]) / (b[0] - a[0]);
+    }
+    function intercept(point, slope) {
+        if (slope === null) {
+            // vertical line
+            return point[0];
+        }
+        return point[1] - slope * point[0];
+    }
+    var m = slope(A, B);
+    var b = intercept(A, m);
+    for (var x = A[0]; x <= B[0]; x++) {
+        var y = m * x + b;
+        coordinates.push([x, y]);
+        //console.log("Coordinates [ " + x,y + "]");
+    }
+    m = slope(C, D);
+    b = intercept(C, m);
+    for (var x = C[0]; x <= D[0]; x++) {
+        var y = m * x + b;
+        coordinates.push([x, y]);
+
+        //console.log("Coordinates [ " + x,y + "]");
+    }
+    m = slope(E, F);
+    b = intercept(E, m);
+    for (var x = E[0]; x <= F[0]; x++) {
+        var y = m * x + b;
+        coordinates.push([x, y]);
+        //console.log("Coordinates [ " + x,y + "]");
+    }
+    m = slope(G, H);
+    b = intercept(G, m);
+    for (var x = G[0]; x <= H[0]; x++) {
+        var y = m * x + b;
+        coordinates.push([x, y]);
+        //console.log("Coordinates [ " + x,y + "]");
+    }
+   for(var j=0;j<coordinates.length;j++){
+
+       //     console.log("Coordinates"+coordinates[j][0] + coordinates[j][1]);   
+
+   }
+    var startX = 100;
+    var startY = 150;
+    var amount = 0;
+    setInterval(function() {
+       if(amount<coordinates.length){
+
+              console.log('Now Drawing for Coordinates X' + coordinates[amount][0] + 'Y' + coordinates[amount][1]);
+               ctx.clearRect(0, 0, canvas.width, canvas.height);
+               ctx.strokeStyle = "black";
+               ctx.moveTo(coordinates[amount][0],coordinates[amount][1]);
+               ctx.lineTo(startX, startY);       
+
+               startX=coordinates[amount][0];
+               startY = coordinates[amount][1];
+               ctx.stroke();
+               amount ++;
+       }else{
+       }
+    }, 30); 
+}); 
+</script>
+</head>
+
+<body>
+
+  <canvas id="paper" width="500" height="500"></canvas>
+
+</body>
+</html>

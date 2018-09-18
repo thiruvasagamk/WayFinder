@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<style>
+    body{ background-color: ivory; }
+</style>
+<body>
+<img style="display:none" id="scream" width="220" height="277" src="11th-stright-1.png" alt="The Scream">
+<canvas id="myCanvas" width="1950" height="1000" style="border:1px solid #d3d3d3;">Your browser does not support the HTML5 canvas tag.
+</canvas>
+<br>
+<input type="text" id="fromPoint" value="N1"/>
+<input type="text" id="endPoint" value="N10"/>
+<button style="font-size:24px" onclick="drawDirection(ctx);">Get Direction <i class="material-icons">add_location</i></button>
+<script>
+
+
+      var request = new XMLHttpRequest();
+      request.open('GET', '/ambishelter/coordinatexyJSON.json', true);
+	  request.setRequestHeader('Content-type','application/json; charset=utf-8');
+      request.onreadystatechange = function() {
+        // Makes sure the document is ready to parse.
+        if(request.readyState == 4) {
+          // Makes sure it's found the file.
+          if(request.status == 200) {
+					var request1 = new XMLHttpRequest();
+					request1.open('GET', '/ambishelter/pathJson.json', true);
+					request1.setRequestHeader('Content-type','application/json; charset=utf-8');
+					request1.onreadystatechange = function() {
+					// Makes sure the document is ready to parse.
+					if(request1.readyState == 4) {
+					// Makes sure it's found the file.
+					if(request1.status == 200) {
+						console.log(request1.responseText);
+						construct(request.responseText,request1.responseText);
+					}
+					}
+					};
+					request1.send(null);
+          }
+        }
+      };
+      request.send(null);
+
+	  
+ 
+ var coordinates;
+ var routes;
+ 
+ 
+  var c = document.getElementById("myCanvas");
+    var ctx = c.getContext("2d");
+	var img = document.getElementById("scream");
+	var cities=[];
+	
+
+/* window.onload = function(x,y) {
+	construct();
+ }*/
+ 
+
+ 
+ function draw(ctx,cities){		
+		for (var i=0;i<cities.length;i++){
+			ctx.beginPath();
+			ctx.arc(cities[i].x, cities[i].y, cities[i].radius, 0 , 2 * Math.PI, false);
+			fill(ctx);
+			ctx.font="bold 25px Arial";
+			ctx.fillText(cities[i].name,cities[i].x, cities[i].y);
+			ctx.stroke();
+		}
+	}
+	
+ function construct(json,json1){
+ 
+	var canvasOffset=$("#myCanvas").offset();
+    var offsetX=canvasOffset.left;
+    var offsetY=canvasOffset.top;
+    ctx.drawImage(img, 10, 10);
+	
+	
+	
+
+	coordinates = $.parseJSON(json);
+	routes = $.parseJSON(json1);
+
+
+	var coordinatesmap = $.map( coordinates, function( value, index ) {
+		console.log(index + value);
+		var xaxis = value.split('#')[0];
+		var yaxis = value.split('#')[1];
+		//if(index.startsWith('D') || index=='N1'){
+		//cities.push({x:xaxis, y:yaxis,  radius:3, name:index});
+		cities.push({x:xaxis, y:yaxis,  radius:10, name:index});//}
+	});
+	draw(ctx,cities);
+	
+	var count = 0;
+	var src;
+	function handleMouseDown(e){
+      // get canvasXY of click
+      canvasMouseX=parseInt(e.clientX-offsetX);
+      canvasMouseY=parseInt(e.clientY-offsetY);
+	  console.log('count'+ count);
+	  if(count==1){
+	   ctx.drawImage(img, 10, 10);draw(ctx,cities);
+	  }
+	  var dest;	  	
+      // test if we clicked in any cities
+      for(var i=0;i<cities.length;i++){
+          var dx=canvasMouseX-cities[i].x;
+          var dy=canvasMouseY-cities[i].y;
+          var isInCity=(dx*dx+dy*dy)<(cities[i].radius*cities[i].radius);
+		 
+          if(isInCity){
+              count++;
+			  console.log(count);
+			  if(count>2){count=0;}
+			  if(count==1){
+				src=cities[i].name; 
+			  }
+			  if(count==2){
+				dest=cities[i].name;
+				var path = src+'-'+dest;
+				var route = routes[path];
+				ctx.setLineDash([5, 3]);
+				var coord = route.split('-');
+				ctx.beginPath();
+				ctx.lineWidth=10;
+				for(var i = 0; i < coord.length; i++){
+					var node = coord[i];
+					var xyaxis = coordinates[node];
+					
+					var xaxis = xyaxis.split('#')[0];
+					var yaxis = xyaxis.split('#')[1];
+					
+					var xparse = parseInt(xaxis);
+					var yparse = parseInt(yaxis);
+					ctx.lineTo(xparse,yparse);
+				}
+				ctx.stroke();
+			  }
+          }
+      }
+    }
+	
+    $("#myCanvas").mousedown(function(e){handleMouseDown(e);});
+	
+
+ }
+ 
+ 	function drawDirection(ctx){
+	
+	
+	ctx.drawImage(img, 10, 10);
+	draw(ctx,cities);
+	
+	var src = $('#fromPoint').val();
+	var dest = $('#endPoint').val();
+	var path = src+'-'+dest;
+	var route = routes[path];
+	ctx.setLineDash([5, 3]);
+	console.log(routes + path);
+	var coord = route.split('-');
+	ctx.beginPath();
+	ctx.lineWidth=10;
+	for(var i = 0; i < coord.length; i++){
+	var node = coord[i];
+	var xyaxis = coordinates[node];
+
+	var xaxis = xyaxis.split('#')[0];
+	var yaxis = xyaxis.split('#')[1];
+
+	var xparse = parseInt(xaxis);
+	var yparse = parseInt(yaxis);
+	ctx.lineTo(xparse,yparse);
+	}
+	ctx.stroke();
+ }
+ 
+function fill(ctx){
+ctx.fillStyle = "green"; 
+//ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
+	ctx.fill();
+	ctx.beginPath();
+}
+function drawLine(ctx,xaxis,yaxis){
+	console.log(ctx);
+	ctx.lineTo(xaxis,yaxis);
+	
+}
+</script>
+
+<p><strong>Note:</strong> The canvas tag is not supported in Internet 
+Explorer 8 and earlier versions.</p>
+
+</body>
+</html>
