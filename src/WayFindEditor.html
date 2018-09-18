@@ -127,19 +127,19 @@
 		<div class="col-sm-9" style="width:75%">
 		  <img style="display:none" id="scream"  src="" alt="The Scream">
 		  <div style="max-height: 500px;max-width:1200px;overflow: scroll;" id="canvasContainer">
-			  <span id="loadFloorMap">No Floor Map Loaded...</span><canvas width="2000px" height="1100px" id="myCanvas"></canvas>
+			  <span id="loadFloorMap"></span><canvas width="2000px" height="1100px" id="myCanvas"></canvas>
 			</div> 
 			<div class="alert success" style="display:none" id="sFileID"><span class="closebtn">&times;</span><strong>Success!</strong> File Created, <a id="downloadlink">Download</a></div>
 		</div>
 		
 		<div> 
 			<div class="grid-item" id="targetElement">
-				<div id="dialog" title="Search" >
+				<div id="dialog" title="Path Details" >
 					<!--Download-->
 					<div class="grid-container">
-						<div class="grid-item"><button style="width:80px;" onclick="createRow();">Add Node</button></div>
-						<div class="grid-item"><button style="width:80px;" onclick="editFloorMap();">Edit file</button></div>
-						<div class="grid-item"><button style="width:80px;" id="create">Create file</button></div>
+						<div class="grid-item"><button style="width:90px;" onclick="createRow();">Add Node</button></div>
+						<!--<div class="grid-item"><button style="width:80px;" onclick="editFloorMap();">Edit file</button></div>-->
+						<div class="grid-item"><button style="width:90px;" id="create">Create file</button></div>
 						<!-- <a href="#file.bat">Batch File</a> -->
 						<!-- <input type="button" value="Launch Installer" onclick="window.open('file:///')" /> -->
 						<div class="grid-item">&nbsp;</div>
@@ -188,19 +188,26 @@
 		ctx = c.getContext("2d");
 		img = document.getElementById("scream");
 		ctx.drawImage(img, 10, 10);
+		$(".ui-dialog").show();
+		editFloorMap();
 	}
    $(document).ready(function(){
+		$('#loadFloorMap').text('No Floor Map Loaded...');
+		$(".ui-dialog").hide();
         $('input[type="file"]').change(function(){
 			//console.log($('input[type="file"]').val());
 			var filePath = $('input[type="file"]').val();
 			var folderLength = filePath.split('\\').length;
 			var fileName = filePath.split('\\')[folderLength-1];
 			$('#scream').attr('src',fileName);
+			c = document.getElementById("myCanvas");
+			ctx.clearRect(0, 0, c.width, c.height);
+			$('#nodeContainer').html('');
+			$('#loadFloorMap').text('No Floor Map Loaded...');
+			$(".ui-dialog").hide();
+			rowCount=0;
 	    });
     });
-
-
-
 
 c.addEventListener('click', function(evt) {
 	var rowID = $('input[name=selectNode]:checked' ).attr('id');
@@ -286,8 +293,10 @@ function editFloorMap(){
 		console.log( "success" );
 	})
 	.done(function(response) {
+			
 			console.log( "second success" + response);
 			var responseCount = 0;
+			var load;
 			var coordinatesmap = $.map( response, function( value, index ) {
 				responseCount++;
 				console.log(index + value);
@@ -299,19 +308,14 @@ function editFloorMap(){
 				links=links.replace('-',',');
 				var coordinateVal = xaxis+','+yaxis;
 				createRowEdit(coordsName,index,coordinateVal,links);
-				
 				ctx.beginPath();
 				drawSquare(xaxis,yaxis,rowCount);
 				ctx.beginPath();
-				drawText(xaxis,parseInt(yaxis)+parseInt(10),index,rowCount);
-	
-	
+				drawText(xaxis,parseInt(yaxis)+parseInt(10),index,rowCount);	
 			});
-	
-	
 	})
 	.fail(function() {
-		console.log( "error" );
+		console.log( "error file might not exist" );
 	})
 	.always(function() {
 		console.log( "complete" );

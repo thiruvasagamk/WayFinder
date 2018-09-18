@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Way Finder Editor</title>
+  <title>Way Finder</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -266,7 +266,6 @@ function draw(ctx,cities){
 		$('#endPoint').append($('<option></option>').attr('value', index).text(coordsName));
 		cities.push({x:xaxis, y:yaxis,  radius:5, name:index});//}
 	});
-	//draw(ctx,cities);
 	
 	var count = 0;
 	var src;
@@ -310,6 +309,7 @@ function draw(ctx,cities){
 					var xparse = parseInt(xaxis);
 					var yparse = parseInt(yaxis);
 					ctx.lineTo(xparse,yparse);
+					 
 				}
 				ctx.stroke();
 			  }
@@ -335,13 +335,16 @@ function draw(ctx,cities){
 	var path = src+'-'+dest;
 	var route = routes[path];
 	ctx.setLineDash([5, 3]);
-	console.log(routes + path);
+	console.log("routes+path"+routes +"+" + path);
 	coord = route.split('-');
+	console.log("coord" + coord);
 	ctx.beginPath();
 	ctx.lineWidth=10;
 	var scrollx;
 	var scrolly;
 	timerMethod = setTimeout(myTimer, 5000);
+	
+	
 	/*
 	for(var i = 0; i < coord.length; i++){
 	
@@ -364,6 +367,30 @@ function draw(ctx,cities){
 	$( "div.demo" ).scrollLeft( 500-scrolly );
 	$( "div.demo" ).scrollTop( 900-scrollx );
  }
+ //Starts
+	var startX = 100;
+	var startY = 150;
+	var amount = 0;
+	function setInterval(ctx,xparse,yparse,coordinates) { 
+	alert("animation");
+	   if(amount<coord.length){
+				
+			  console.log('Now Drawing for Coordinates X' + coordinates[amount][0] + 'Y' + coordinates[amount][1]);
+			   ctx.clearRect(0, 0, canvas.width, canvas.height);
+			   ctx.strokeStyle = "black";
+			   ctx.moveTo(coordinates[amount][0],coordinates[amount][1]);
+			   ctx.lineTo(startX, startY);       
+
+			   startX=coordinates[amount][0];
+			   startY = coordinates[amount][1];
+			   ctx.stroke();
+			   amount ++;
+	   }else{
+	   }
+	}
+	setInterval(ctx,xparse,yparse,coordinates);
+//Ends here
+	
  var loopCount = 0;
  
  function myTimer() {
@@ -395,6 +422,7 @@ function drawLine(ctx,xaxis,yaxis){
 	console.log(ctx);
 	ctx.lineTo(xaxis,yaxis);	
 }
+
 </script>
 </body>
 </html>
